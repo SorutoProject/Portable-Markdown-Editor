@@ -1,6 +1,9 @@
 # Portable-Markdown-Editor
  A markdown editor in one HTML file.
 
+## Screenshot
+![screenshot](screenshot.png)
+
 ## How to use
 1. Download `markdown-editor.html`, and put it where you want.
 2. Open the file in a web browser.
