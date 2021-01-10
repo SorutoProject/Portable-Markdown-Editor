@@ -159,7 +159,7 @@ textarea.editor{
 					<div class="markdown-body" id="preview" v-html="markdownHTML"></div>
 				</div>
 				<!--slide-->
-				<div id="slides" class="column" v-if="visible.slide">
+				<div id="slides" class="column hide-in-print" v-if="visible.slide">
 					<div id="slides-wrapper">
 						<div class="slide markdown-body" v-for="(page, index) in slide.slideHTMLs" :key="page" v-html="page" v-if="index === slide.currentPage"></div>
 					</div>
