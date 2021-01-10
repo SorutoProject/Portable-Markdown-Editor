@@ -205,6 +205,16 @@ const app = new Vue({
 		"markdown":function(md){
 			const markdownHTML = marked(md,{breaks:true});
 			const previewDOM = (new DOMParser()).parseFromString(markdownHTML, "text/html");
+
+			//add target="_blank" to a[href]
+			previewDOM.querySelectorAll(`a[href]`).forEach(function(link){
+				link.setAttribute("target","_blank");
+			});
+
+			//add title to a[href]:not([title])
+			previewDOM.querySelectorAll(`a[href]:not([title])`).forEach(function(link){
+				link.setAttribute("title","Click to open in new tab.")
+			});
 			
 			//highlight Code
 			const codeEls = previewDOM.querySelectorAll(`pre > code[class^="language-"]`);
