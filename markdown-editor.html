@@ -161,6 +161,7 @@ textarea.editor{
 				<!--slide-->
 				<div id="slides" class="column hide-in-print" v-if="visible.slide">
 					<div id="slides-wrapper">
+						<div class="has-text-grey hide-in-print" v-if="markdown === ''">Your markdown slides will be shown here...</div>
 						<div class="slide markdown-body" v-for="(page, index) in slide.slideHTMLs" :key="page" v-html="page" v-if="index === slide.currentPage"></div>
 					</div>
 					<div class="subheader pr-2 has-text-right" id="slide-controller">
