@@ -11,6 +11,12 @@
 
 * You can also use this app on https://sorutoproject.github.io/Portable-Markdown-Editor/markdown-editor.html
 
+## Features
+* GFM Support
+* Markdown Preview
+* Markdown Slides
+    * Use `---` or `***` to page break in slide mode.
+
 ## Notice
 * the file size of `markdown-editor.html` is large, so I recommend **Visual Studio** to open the file. Other editors may be crash when open the file. 
 
