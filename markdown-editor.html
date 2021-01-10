@@ -57,6 +57,9 @@ html{
 	overflow-y:hidden;
 	overflow-x:hidden;
 }
+[v-cloak]{
+	display:none;
+}
 div.columns{
 	height:calc(100vh - 60px);
 	margin-left:0;
@@ -126,8 +129,9 @@ textarea.editor{
 <vue-app v-cloak>
 	<div class="pl-2 hide-in-print has-background-light" id="header">
 		<button class="button is-small" @click="open">Open</button>
-		<button class="button is-small" @click="save">Save</button>
+		<button class="button is-small" :class="{'is-danger':edited}" @click="save">Save</button>
 		<button class="button is-small" @click="print" :disabled="!visible.preview">Print</button>
+		<a class="button is-small is-dark" href="https://github.com/SorutoProject/Portable-Markdown-Editor/" target="_blank">GitHub</a>
 	</div>
 		<div class="ml-3 hide-in-print subheader">
 			<!--visible settings-->
@@ -177,18 +181,14 @@ textarea.editor{
 	
 </vue-app>
 <script>
-//confirm message
-window.addEventListener('beforeunload', function (e) {
-  e.preventDefault();
-  e.returnValue = '';
-});
-
 //Initialize the App
 const app = new Vue({
 	data(){
 		return {
 			markdown:"",
 			markdownHTML:"",
+			edited:false,
+			defaultMarkdown:"",
 			slide:{
 				slideHTMLs:[""],
 				currentPage:0,
@@ -231,6 +231,13 @@ const app = new Vue({
 			//Build slides
 			this.slide.slideHTMLs = this.markdownHTML.split("<hr>");
 
+			//edited flag
+			if(this.defaultMarkdown !== this.markdown){
+				this.edited = true;
+			}else{
+				this.edited = false;
+			}
+
 		},
 		"slide.slideHTMLs":function(){
 			this.slide.total = this.slide.slideHTMLs.length;
@@ -241,7 +248,7 @@ const app = new Vue({
 		save(){
 			const a = document.createElement("a");
 			a.setAttribute("href",`data:text/markdown,${encodeURIComponent(this.markdown)}`);
-			console.log(a.href);
+			//console.log(a.href);
 			//Set Filename
 			let filename = "";
 			let mdHTMLEl = document.getElementById("preview");
@@ -253,9 +260,17 @@ const app = new Vue({
 			filename += ".md";
 			a.download = filename;
 			a.click();
+
+			this.edited = false;
 		},
 		//open .md file
 		open(){
+			if(this.edited === true){
+				if(!confirm("[Confirm]\nThe changes haven't been saved.\nYou will loss your changes if you open other file.\n\nContinue?")){
+					return;
+				}
+			}
+
 			const self = this;
 			const file = document.createElement("input");
 			file.setAttribute("type", "file");
@@ -269,6 +284,9 @@ const app = new Vue({
 
 					//reset slide currentPage
 					self.slide.currentPage = 0;
+
+					self.edited = false;
+					self.defaultMarkdown = reader.result;
 				}
 
 				reader.readAsText(mdFile);
@@ -297,6 +315,14 @@ const app = new Vue({
 		}
 	}
 }).$mount("vue-app");
+
+//confirm message
+window.addEventListener('beforeunload', function (e) {
+  if(app.edited === true){
+	e.preventDefault();
+  	e.returnValue = '';
+  }
+});
 
 //[TAB] Key Support
 document.getElementById('editor').addEventListener('keydown', function (e) {
