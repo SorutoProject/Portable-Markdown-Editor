@@ -229,8 +229,15 @@ const app = new Vue({
 			const codeEls = previewDOM.querySelectorAll(`pre > code[class^="language-"]`);
 			//console.log(codeEls);
 			codeEls.forEach(function(codeEl){
+				const language = codeEl.className.split("language-")[1];
+
 				const code = codeEl.textContent;
-				const codeHighlighted = hljs.highlightAuto(code).value;
+				let codeHighlighted = "";
+				if(hljs.listLanguages().indexOf(language) > -1){
+					codeHighlighted = hljs.highlight(language, code).value;
+				}else{
+					codeHighlighted = hljs.highlightAuto(code).value;
+				}
 				
 				//Rewrite <code> Element
 				codeEl.innerHTML = codeHighlighted;
