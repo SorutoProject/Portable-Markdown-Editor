@@ -105,6 +105,14 @@ textarea.editor{
 	list-style-type: square;
 }
 
+/*code filename*/
+.markdown-body pre > code div.code-filename{
+	background:#ddd;
+	padding:2px;
+	position: absolute;
+	top:12px;
+	left:12px;
+}
 #slides-wrapper{
 	height:calc(100% - 30px);
 	overflow:auto;
@@ -226,10 +234,13 @@ const app = new Vue({
 			});
 			
 			//highlight Code
+			//Markdown syntax: ```(LanguageName):(FileName)
 			const codeEls = previewDOM.querySelectorAll(`pre > code[class^="language-"]`);
 			//console.log(codeEls);
 			codeEls.forEach(function(codeEl){
-				const language = codeEl.className.split("language-")[1];
+				const language = codeEl.className.split("language-")[1].split(":")[0];
+				//code's filename
+				const filename = codeEl.className.split(":")[1];
 
 				const code = codeEl.textContent;
 				let codeHighlighted = "";
@@ -238,7 +249,9 @@ const app = new Vue({
 				}else{
 					codeHighlighted = hljs.highlightAuto(code).value;
 				}
-				
+				if(filename !== undefined){
+					codeHighlighted = `<div class="code-filename">${filename}</div><br>${codeHighlighted}`
+				}
 				//Rewrite <code> Element
 				codeEl.innerHTML = codeHighlighted;
 			});
