@@ -298,7 +298,7 @@ const app = new Vue({
 		//open .md file
 		open(){
 			if(this.edited === true){
-				if(!confirm("[Confirm]\nThe changes haven't been saved.\nYou will loss your changes if you open other file.\n\nContinue?")){
+				if(!confirm("[Confirm]\nThe changes haven't been saved.\nYou will lose your changes if you open other file.\n\nContinue?")){
 					return;
 				}
 			}
@@ -349,7 +349,7 @@ const app = new Vue({
 		file_dd_drop(){
 			this.isDragged = false;
 			if(this.edited === true){
-				if(!confirm("[Confirm]\nThe changes haven't been saved.\nYou will loss your changes if you open other file.\n\nContinue?")){
+				if(!confirm("[Confirm]\nThe changes haven't been saved.\nYou will lose your changes if you open other file.\n\nContinue?")){
 					return;
 				}
 			}
