@@ -259,7 +259,9 @@ const app = new Vue({
 				codeEl.innerHTML = codeHighlighted;
 			});
 			//Apply Preview
-			this.markdownHTML = DOMPurify.sanitize(previewDOM.body.innerHTML);
+			this.markdownHTML = DOMPurify.sanitize(previewDOM.body.innerHTML,{
+				ADD_ATTR:["target"]
+			});
 			//Build slides
 			this.slide.slideHTMLs = this.markdownHTML.split("<hr>");
 
