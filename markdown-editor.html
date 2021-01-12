@@ -348,6 +348,7 @@ const app = new Vue({
 
 		file_dd_drop(){
 			this.isDragged = false;
+			const mdFile = event.dataTransfer.files[0];
 			if(this.edited === true){
 				if(!confirm("[Confirm]\nThe changes haven't been saved.\nYou will lose your changes if you open other file.\n\nContinue?")){
 					return;
@@ -355,7 +356,6 @@ const app = new Vue({
 			}
 
 			const self = this;
-			const mdFile = event.dataTransfer.files[0];
 			const reader = new FileReader();
 				
 			reader.onload = function(){
