@@ -173,7 +173,7 @@ textarea.editor{
 				<!--Editor-->
 				<div class="column hide-in-print" v-if="visible.editor" id="editor-container">
 					<textarea 
-						class="textarea editor" placeholder="Enter markdown or drop any .md file!" v-model="markdown" id="editor"></textarea>
+						class="textarea editor" placeholder="Enter markdown or drop any .md file!" v-model="markdown" id="editor" @scroll="on_editor_scroll"></textarea>
 				</div>
 				<!--Preview-->
 				<div class="column visible-in-print" id="preview-wrapper" v-if="visible.preview">
@@ -285,7 +285,7 @@ const app = new Vue({
 			//console.log(a.href);
 			//Set Filename
 			let filename = "";
-			let mdHTMLEl = document.getElementById("preview");
+			let mdHTMLEl =  (new DOMParser()).parseFromString(this.markdownHTML, "text/html");
 			if(mdHTMLEl.querySelector("h1,h2,h3") !== null){
 				filename = mdHTMLEl.querySelector("h1,h2,h3").textContent;
 			}else{
@@ -296,6 +296,7 @@ const app = new Vue({
 			a.click();
 
 			this.edited = false;
+			this.defaultMarkdown = this.markdown;
 		},
 		//open .md file
 		open(){
@@ -371,7 +372,38 @@ const app = new Vue({
 			reader.readAsText(mdFile);
 
 
-		}
+		},
+		on_editor_scroll(){
+			const editor = document.getElementById("editor");
+			//https://tokunagakazuya.tk/eokn
+			//get current line at the top of the editor
+			const editorLineHeight = editor.value.split("\n").length;
+			const topLineNumber = Math.ceil(editorLineHeight * (editor.scrollTop / editor.scrollHeight));
+			//console.log(topLineNumber);
+
+			//get current markdown before the top of the editor
+			let mdBeforeTop = "";
+			const mdPerLines = editor.value.split("\n");
+			for(let i = 0; i < topLineNumber; i++){
+				mdBeforeTop+= mdPerLines[i] + "\n";
+			}
+			//console.log(mdBeforeTop);
+
+			//parse docBeforeTop
+			const htmlBeforeTop = marked(mdBeforeTop, {breaks:true});
+			const DOM = (new DOMParser()).parseFromString(htmlBeforeTop, "text/html");
+			const elementsBeforeTop = DOM.body.querySelectorAll("p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table");
+
+			//scroll the preview
+			const preview = document.getElementById("preview-wrapper");
+			const elementsInPreview = preview.querySelectorAll("p, h1, h2, h3, h4, h5, h6, li, pre, blockquote, hr, table");
+			console.log(elementsBeforeTop);
+			if(elementsInPreview.length > 0){
+				preview.scrollTop = elementsInPreview[elementsBeforeTop.length].offsetTop;
+				console.log(elementsInPreview[elementsBeforeTop.length].offsetTop);
+			}
+		},
+
 	}
 }).$mount("vue-app");
 
