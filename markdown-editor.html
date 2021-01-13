@@ -180,11 +180,11 @@ textarea.editor{
 				</div>
 				<!--Preview-->
 				<div class="column visible-in-print" id="preview-container" v-if="visible.preview">
-					<div id="preview-wrapper">
+					<div id="preview-wrapper" class="visible-in-print">
 						<div class="has-text-grey hide-in-print" v-if="markdown === ''">Your markdown will be shown here...</div>
 						<div class="markdown-body" id="preview" v-html="markdownHTML"></div>
 					</div>
-					<div class="subheader pr-2 has-text-right" id="preview-controller">
+					<div class="subheader pr-2 has-text-right hide-in-print" id="preview-controller">
 						<label class="checkbox" v-if="visible.editor">
 							<input type="checkbox" v-model="sync.preview">
 							<span class="is-size-7">Toggle Sync Scrolling</span>
@@ -438,6 +438,33 @@ window.addEventListener('beforeunload', function (e) {
   }
 });
 
+//Slide functions
+//Sync between the cursor in the editor and the page of slide
+setInterval(function(){
+	if(!app.sync.slide) return;
+	if(!app.visible.editor || !app.visible.slide) return;
+	if(document.activeElement !== document.getElementById("editor")) return;
+	const editor = document.getElementById("editor");
+	const docBeforeCursor = editor.value.substr(0, editor.selectionStart);
+	//console.log(docBeforeCursor);
+	const DOM = (new DOMParser()).parseFromString(marked(docBeforeCursor, {breaks:true}), "text/html");
+	//count the number of <hr> and change the slide's page.
+	app.slide_go(DOM.body.querySelectorAll("hr").length);
+	//console.log(DOM.body.querySelectorAll("hr").length);
+},100);
+//← and → keys to change pages
+document.documentElement.addEventListener("keydown", function(e){
+	if(document.activeElement === document.getElementById("editor")) return;
+	if(!app.visible.slide) return;
+	if(e.key === "ArrowLeft"){
+		e.preventDefault();
+		app.slide_back();
+	}else if(e.key === "ArrowRight"){
+		e.preventDefault();
+		app.slide_forward();
+	}
+});
+
 //[TAB] Key Support
 document.getElementById('editor').addEventListener('keydown', function (e) {
   var elem, end, start, value;
@@ -453,34 +480,6 @@ document.getElementById('editor').addEventListener('keydown', function (e) {
     elem.selectionStart = elem.selectionEnd = start + 1;
     return false;
   }
-});
-
-//Slide functions
-//Sync between the cursor in the editor and the page of slide
-setInterval(function(){
-	if(!app.sync.slide) return;
-	if(!app.visible.editor || !app.visible.slide) return;
-	if(document.activeElement !== document.getElementById("editor")) return;
-	const editor = document.getElementById("editor");
-	const docBeforeCursor = editor.value.substr(0, editor.selectionStart);
-	//console.log(docBeforeCursor);
-	const DOM = (new DOMParser()).parseFromString(marked(docBeforeCursor, {breaks:true}), "text/html");
-	//count the number of <hr> and change the slide's page.
-	app.slide_go(DOM.body.querySelectorAll("hr").length);
-	//console.log(DOM.body.querySelectorAll("hr").length);
-},100);
-
-//← and → keys to change pages
-document.documentElement.addEventListener("keydown", function(e){
-	if(document.activeElement === document.getElementById("editor")) return;
-	if(!app.visible.slide) return;
-	if(e.key === "ArrowLeft"){
-		e.preventDefault();
-		app.slide_back();
-	}else if(e.key === "ArrowRight"){
-		e.preventDefault();
-		app.slide_forward();
-	}
 });
 </script>
 </body>
