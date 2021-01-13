@@ -16,14 +16,17 @@
 * Markdown Preview
 * Markdown Slides
     * Use `---` or `***` to page break in slide mode.
+* Emoji Support
 
 ## Notice
 * the file size of `markdown-editor.html` is large, so I recommend **Visual Studio** to open the file. Other editors may be crash when open the file. 
 
 ## Dependencies
 > All dependencies are included in `markdown-editor.html`
-* Bulma
-* github-markdown-css
-* highlight.js
-* Vue v.2.x
-* marked.js
+* [Bulma](https://github.com/jgthms/bulma)
+* [github-markdown-css](https://github.com/sindresorhus/github-markdown-css)
+* [highlight.js](https://github.com/highlightjs/highlight.js)
+* [Vue v.2.x](https://github.com/vuejs/vue)
+* [marked.js](https://github.com/markedjs/marked)
+* [DOMPurify](https://github.com/cure53/DOMPurify)
+* [js-emoji](https://github.com/iamcal/js-emoji)
