@@ -154,6 +154,10 @@ textarea.editor{
 	height:30px;
 	margin-bottom:5px;
 }
+.katex *{
+	font-style: normal !important;
+	font-family: "Times New Roman", serif !important;
+}
 @media print{
 	.hide-in-print{
 		display:none;
@@ -274,7 +278,7 @@ const app = new Vue({
 			
 			//parse formulas
 			//block formula
-			md = md.replace(/\$\$(.*)\$\$/g, function(all, formula){
+			md = md.replace(/\$\$(.*?)\$\$/g, function(all, formula){
 				try{
 					return katex.renderToString(formula, {
 						displayMode: true
@@ -285,7 +289,7 @@ const app = new Vue({
 			});
 
 			//inline formula
-			md = md.replace(/\$(.*)\$/g, function(all, formula){
+			md = md.replace(/\$(.*?)\$/g, function(all, formula){
 				try{
 					return katex.renderToString(formula);
 				}catch(e){
