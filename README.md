@@ -30,3 +30,4 @@
 * [marked.js](https://github.com/markedjs/marked)
 * [DOMPurify](https://github.com/cure53/DOMPurify)
 * [js-emoji](https://github.com/iamcal/js-emoji)
+* [KaTex](https://github.com/KaTeX/KaTeX)
